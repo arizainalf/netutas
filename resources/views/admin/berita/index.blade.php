@@ -88,7 +88,7 @@
                         cropper.destroy();
                     }
                     cropper = new Cropper(document.getElementById('image-crop'), {
-                        aspectRatio: 1,
+                        aspectRatio: 4 / 3,
                         viewMode: 1
                     });
                 };
@@ -138,6 +138,7 @@
         }
 
         $(document).ready(function() {
+            $('.dropify').dropify();
             datatableCall('berita-table', '{{ route('admin.berita.index') }}', [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex'

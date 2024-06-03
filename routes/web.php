@@ -33,6 +33,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('berita',[HomeController::class, 'berita'])->name('berita');
 Route::get('prestasi',[HomeController::class, 'prestasi'])->name('prestasi');
 Route::get('staff',[HomeController::class, 'staff'])->name('staff');
+Route::get('kontak',[HomeController::class, 'kontak'])->name('kontak');
 Route::get('berita/{slug}', [App\Http\Controllers\HomeController::class, 'getBerita'])->name('berita.single');
 Route::match(['get', 'post'], '/login', [AuthController::class, 'login'])->name('login');
 Route::get('/forgot-password', [App\Http\Controllers\AuthController::class, 'forgotPassword'])->middleware('guest')->name('password.request');
@@ -51,6 +52,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
   Route::resource('prestasi', PrestasiController::class)->names('admin.prestasi');
   Route::resource('ekstrakurikuler', EkstrakurikulerController::class)->names('admin.ekstrakurikuler');
   Route::match(['get', 'put'], 'profil', [ProfilController::class, 'index'])->name('admin.profil');
+  Route::match(['get', 'put'], 'profil/password', [ProfilController::class, 'updatePassword'])->name('admin.profil.password');
   Route::match(['get', 'put'], 'profil-sekolah', [ProfilSekolahController::class, 'index'])->name('admin.profil.sekolah');
-  Route::put('profil/password', [ProfilController::class, 'updatePassword'])->name('admin.profil.password');
+  Route::put('profil/kontak', [ProfilSekolahController::class, 'updateKontak'])->name('admin.profil.sekolah.kontak');
 });

@@ -159,6 +159,7 @@
             background: white;
         }
 
+        /*
         .fh5co-blog .blog-text {
             margin-bottom: 30px;
             position: relative;
@@ -169,7 +170,7 @@
             -webkit-box-shadow: 0px 10px 20px -12px rgba(0, 0, 0, 0.18);
             -moz-box-shadow: 0px 10px 20px -12px rgba(0, 0, 0, 0.18);
             box-shadow: 0px 10px 20px -12px rgba(0, 0, 0, 0.18);
-        }
+        } */
 
         .fh5co-project {
             margin-bottom: 30px;
@@ -232,17 +233,17 @@
 
         .fh5co-project>a h2 {
             font-size: 17px;
-            bottom: 75px;
+            bottom: 100px;
         }
 
         .fh5co-project>a h3 {
-            bottom: 45px;
             font-size: 15px;
+            bottom: 75px;
         }
 
         .fh5co-project>a span {
             font-size: 15px;
-            bottom: 20px;
+            bottom: 15px;
         }
 
         .fh5co-project>a:hover {
@@ -270,12 +271,12 @@
         }
 
         .fh5co-project>a:hover h2 {
-            bottom: 85px;
+            bottom: 125px;
             /* Adjust the hover position as needed */
         }
 
         .fh5co-project>a:hover h3 {
-            bottom: 55px;
+            bottom: 90px;
         }
 
         .fh5co-project>a:hover img {

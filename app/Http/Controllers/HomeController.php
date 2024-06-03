@@ -62,6 +62,12 @@ class HomeController extends Controller
         return view('pages.prestasi.index',compact('prestasis','profile'));
     }
 
+    public function kontak(Request $request){
+    $profile = Profile::where('id', 1)->first();
+    
+    return view('pages.kontak.index',compact('profile'));
+    }
+
     public function staff(Request $request){
         $staffs = StaffGuru::with('jabatan','mapel')->paginate(9);
         $profile = Profile::where('id', 1)->first();

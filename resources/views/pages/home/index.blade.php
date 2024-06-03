@@ -3,6 +3,21 @@
 @section('title', 'User')
 
 @push('style')
+    <style>
+        .carousel-inner>.item>img,
+        .carousel-inner>.item>a>img {
+            width: 100%;
+            height: auto;
+            margin: auto;
+        }
+
+        .carousel-caption {
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            padding: 10px 20px;
+            bottom: 20px;
+        }
+    </style>
 @endpush
 
 @section('main')
@@ -100,19 +115,36 @@
                 </div>
             </div>
         </div>
-        <div class="container-fluid proj-bottom">
-            <div class="row">
-                @foreach ($prestasi as $prestasi)
-                    <div class="col-md-4 col-sm-6 fh5co-project animate-box" data-animate-effect="fadeIn">
-                        <a href="#"><img src="{{ asset('storage/img/prestasi/' . $prestasi->image) }}"
-                                alt="Free HTML5 Website Template by FreeHTML5.co" class="img-responsive">
-                            <h3>{{ $prestasi->nama }}</h3>
-                            <span>Tingkat {{ $prestasi->tingkat }}, {{ $prestasi->peraih }}</span>
-                        </a>
-                    </div>
-                @endforeach
+        <div class="container proj-bottom">
+            @php
+                $counter = 0;
+            @endphp
+
+            @foreach ($prestasi as $prestasi)
+                @if ($counter % 3 == 0)
+                    @if ($counter > 0)
+        </div> <!-- close the previous row -->
+        @endif
+        <div class="row"> <!-- start a new row -->
+            @endif
+
+            <div class="col-md-4 fh5co-project animate-box" data-animate-effect="fadeIn">
+                <a href="#"><img src="{{ asset('storage/img/prestasi/' . $prestasi->image) }}"
+                        alt="Free HTML5 Website Template by FreeHTML5.co" class="img-responsive">
+                    <h3>{{ $prestasi->nama }}</h3>
+                    <span>Tingkat {{ $prestasi->tingkat }}, {{ $prestasi->peraih }}</span>
+                </a>
             </div>
-        </div>
+
+            @php
+                $counter++;
+            @endphp
+
+            @if ($loop->last)
+        </div> <!-- close the last row -->
+        @endif
+        @endforeach
+    </div>
     </div>
 
     <div id="fh5co-testimonial">
@@ -156,43 +188,40 @@
                     <p>Berita terbaru tentang SMP Negeri 7 Tasikmalaya.</p>
                 </div>
             </div>
-            <div class="row">
-                @foreach ($berita as $berita)
-                    <div class="col-lg-4 col-md-4">
-                        <div class="fh5co-blog animate-box">
-                            <a href="#"><img class="img-responsive"
-                                    src="{{ asset('storage/img/berita/' . $berita->gambar) }}" alt=""></a>
-                            <div class="blog-text">
-                                <h3><a href=""#>{{ $berita->judul }}</a></h3>
-                                <span class="posted_on">{{ $berita->created_at }}</span>
-                                <span class="comment"><i class="icon-pencil"></i>{{ $berita->user->nama }}</span>
-                                <p>{{ $berita->deskripsi }}</p>
-                                <a href="{{ url('berita/' . $berita->slug) }}" class="btn btn-primary">Selengkapnya</a>
-                            </div>
-                        </div>
+            @php
+                $counter = 0;
+            @endphp
+
+            @foreach ($berita as $berita)
+                @if ($counter % 3 == 0)
+                    @if ($counter > 0)
+        </div> <!-- close the previous row -->
+        @endif
+        <div class="row"> <!-- start a new row -->
+            @endif
+
+            <div class="col-lg-4 col-md-4">
+                <div class="fh5co-blog animate-box">
+                    <a href="#"><img class="img-responsive"
+                            src="{{ asset('storage/img/berita/' . $berita->gambar) }}" alt=""></a>
+                    <div class="blog-text">
+                        <h3><a href="{{ route('home') }}">{{ $berita->judul }}</a></h3>
+                        <span class="posted_on">{{ $berita->created_at }}</span>
+                        <p>{{ Str::limit($berita->deskripsi, 50, '...') }}</p>
+                        <a href="{{ url('berita/' . $berita->slug) }}" class="btn btn-primary">Selengkapnya</a>
                     </div>
-                @endforeach
+                </div>
             </div>
-        </div>
+
+            @php
+                $counter++;
+            @endphp
+
+            @if ($loop->last)
+        </div> <!-- close the last row -->
+        @endif
+        @endforeach
     </div>
-
-
-    <div id="fh5co-started" style="background-image:url({{ asset('images/img_bg_2.jpg') }});">
-        <div class="overlay"></div>
-        <div class="container">
-            <div class="row animate-box">
-                <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-                    <h2>Lets Get Started</h2>
-                    <p>Dignissimos asperiores vitae velit veniam totam fuga molestias accusamus alias autem
-                        provident. Odit ab aliquam dolor eius.</p>
-                </div>
-            </div>
-            <div class="row animate-box">
-                <div class="col-md-8 col-md-offset-2 text-center">
-                    <p><a href="#" class="btn btn-default btn-lg">Create A Free Course</a></p>
-                </div>
-            </div>
-        </div>
     </div>
 @endsection
 

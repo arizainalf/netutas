@@ -28,8 +28,8 @@
                                 <form id="updateData">
                                     @method('PUT')
                                     <div class="form-group mb-1">
-                                        <img src="{{ asset('storage/img/user/user.png') }}" alt=""
-                                            class="img-thumbnail" width="200px">
+                                        <img src="{{ asset('storage/img/profil/' . $profileSekolah['logo_sekolah']) }}"
+                                            alt="" class="img-thumbnail" width="200px">
                                     </div>
                                     <div class="form-group">
 
@@ -63,18 +63,6 @@
                                         <textarea class=" form-control summernote-simple" name="visi">{{ $profileSekolah['visi'] }}</textarea>
                                     </div>
                                     <div class="form-group">
-                                        <label for="misi" class="form-label">Misi <span
-                                                class="text-danger">*</span></label>
-                                        <textarea class=" form-control summernote" name="misi">{{ $profileSekolah['misi'] }}</textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="sejarah" class="form-label">Sejarah <span
-                                                class="text-danger">*</span></label>
-                                        <textarea class=" form-control summernote-simple" name="sejarah">{{ $profileSekolah['sejarah'] }}</textarea>
-                                    </div>
-
-
-                                    <div class="form-group">
                                         <button type="submit" class="btn btn-success">Simpan</button>
                                     </div>
                                 </form>
@@ -87,7 +75,7 @@
                                 <h4 class="text-dark">Data Kontak Sekolah</h4>
                             </div>
                             <div class="card-body">
-                                <form id="updatePassword">
+                                <form id="updateKontak">
                                     @method('PUT')
 
                                     <div class="form-group">
@@ -98,11 +86,11 @@
                                         <small class="invalid-feedback" id="erroremail"></small>
                                     </div>
                                     <div class="form-group">
-                                        <label for="nomor_telepon" class="form-label">Nomor Telepon<span
+                                        <label for="no_telepon" class="form-label">Nomor Telepon<span
                                                 class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="nomor_telepon"
-                                            name="nomor_telepon" value="{{ $profileSekolah['nomor_telepon'] }}">
-                                        <small class="invalid-feedback" id="errornomor_telepon"></small>
+                                        <input type="text" class="form-control" id="no_telepon" name="no_telepon"
+                                            value="{{ $profileSekolah['no_telepon'] }}">
+                                        <small class="invalid-feedback" id="errorno_telepon"></small>
                                     </div>
                                     <div class="form-group">
                                         <label for="ig" class="form-label">Instagram<span
@@ -162,7 +150,7 @@
             $("#updateData").submit(function(e) {
                 setButtonLoadingState("#updateData .btn.btn-success", true);
                 e.preventDefault();
-                const url = `{{ route('admin.profil') }}`;
+                const url = `{{ route('admin.profil.sekolah') }}`;
                 const data = new FormData(this);
 
                 const successCallback = function(response) {
@@ -170,7 +158,9 @@
                     setButtonLoadingState("#updateData .btn.btn-success", false);
                     handleSuccess(response, null, null, "no");
                     $(".img-navbar").css("background-image",
-                        `url('/storage/img/user/${response.data.image}')`);
+                        `url('/storage/img/profil/${response.data.image}')`);
+                    location.reload(); // Refresh halaman setelah berhasil menyimpan
+
                 };
 
                 const errorCallback = function(error) {
@@ -181,22 +171,23 @@
                 ajaxCall(url, "POST", data, successCallback, errorCallback);
             });
 
-            $("#updatePassword").submit(function(e) {
-                setButtonLoadingState("#updatePassword .btn.btn-success", true);
+            $("#updateKontak").submit(function(e) {
+                setButtonLoadingState("#updateKontak .btn.btn-success", true);
                 e.preventDefault();
-                const url = `{{ route('admin.profil.password') }}`;
+                const url = `{{ route('admin.profil.sekolah.kontak') }}`;
                 const data = new FormData(this);
 
                 const successCallback = function(response) {
-                    setButtonLoadingState("#updatePassword .btn.btn-success", false);
+                    setButtonLoadingState("#updateKontak .btn.btn-success", false);
                     handleSuccess(response, null, null, "no");
-                    $('#updatePassword .form-control').removeClass("is-invalid").val("");
-                    $('#updatePassword .text-danger').html("");
+                    $('#updateKontak .form-control').removeClass("is-invalid").val("");
+                    $('#updateKontak .text-danger').html("");
+                    location.reload(); // Refresh halaman setelah berhasil menyimpan
                 };
 
                 const errorCallback = function(error) {
-                    setButtonLoadingState("#updatePassword .btn.btn-success", false);
-                    handleValidationErrors(error, "updatePassword", ["password_lama", "password"]);
+                    setButtonLoadingState("#updateKontak .btn.btn-success", false);
+                    handleValidationErrors(error, "updateKontak", ["password_lama", "password"]);
                 };
 
                 ajaxCall(url, "POST", data, successCallback, errorCallback);

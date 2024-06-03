@@ -37,7 +37,7 @@
                             <h4><a href="#">{{ $beritas[$i]->judul }}</a></h4>
                             <span class="posted_on">{{ $beritas[$i]->created_at }}</span>
                             {{-- <span class="comment"><i class="icon-pencil"></i>{{ $beritas[$i]->user->nama }}</span> --}}
-                            <p>{{ Str::limit($beritas[$i]->deskripsi, 20, '...') }}</p>
+                            <p>{{ Str::limit($beritas[$i]->deskripsi, 50, '...') }}</p>
                             <a href="{{ url('berita/' . $beritas[$i]->slug) }}" class="btn btn-primary">Selengkapnya</a>
                         </div>
                     </div>

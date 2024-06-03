@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Traits\JsonResponder;
-use Illuminate\Auth\Events\PasswordReset;
+use App\Models\Profile;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Traits\JsonResponder;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -19,6 +20,8 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        $profileSekolah = Profile::where('id', 1)->first();
+
         if (Auth::check()) {
             return redirect()->route('admin.dashboard');
         }
@@ -46,7 +49,7 @@ class AuthController extends Controller
 
         }
 
-        return view('auth.login');
+        return view('auth.login',compact('profileSekolah'));
     }
 
     public function resetPassword(Request $request, $token = null)

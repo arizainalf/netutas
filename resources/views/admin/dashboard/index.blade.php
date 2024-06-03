@@ -33,14 +33,14 @@
                 <div class="col-lg-6 col-md-6 col-12">
                     <div class="card card-statistic-1">
                         <div class="card-icon bg-danger">
-                            <i class="far fa-solid fa-people-roof"></i>
+                            <i class="far fa-solid fa-users"></i>
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Ekstrakurikuler</h4>
+                                <h4>User</h4>
                             </div>
                             <div class="card-body">
-                                {{ $ekstrakurikuler }}
+                                {{ $user }}
                             </div>
                         </div>
                     </div>

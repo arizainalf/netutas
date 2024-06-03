@@ -26,22 +26,39 @@
     </header>
     <div id="fh5co-project">
         <div class="container-fluid proj-bottom">
-            <div class="row"> <!-- Start new row -->
-                @foreach ($prestasis as $prestasi)
-                    <div class="col-md-4 col-sm-6 fh5co-project animate-box" data-animate-effect="fadeIn">
-                        <a href=""><img src="{{ asset('storage/img/prestasi/' . $prestasi->image) }}"
-                                alt="Free HTML5 Website Template by FreeHTML5.co" class="img-responsive">
-                            <h2>{{ $prestasi->nama }}</h2>
-                            <h3>Tingkat : {{ $prestasi->tingkat }}</h3>
-                            <span>Diraih oleh : {{ $prestasi->peraih }}</span>
-                        </a>
-                    </div>
-                @endforeach
-            </div> <!-- Close the last row -->
-            <div class="text-center">
-                {{ $prestasis->links() }}
+            @php
+                $counter = 0;
+            @endphp
+
+            @foreach ($prestasis as $prestasi)
+                @if ($counter % 3 == 0)
+                    @if ($counter > 0)
+        </div> <!-- close the previous row -->
+        @endif
+        <div class="row"> <!-- start a new row -->
+            @endif
+
+            <div class="col-md-4 fh5co-project animate-box" data-animate-effect="fadeIn">
+                <a href="#"><img src="{{ asset('storage/img/prestasi/' . $prestasi->image) }}"
+                        alt="Free HTML5 Website Template by FreeHTML5.co" class="img-responsive">
+                    <h3>{{ $prestasi->nama }}</h3>
+                    <span>Tingkat {{ $prestasi->tingkat }}, {{ $prestasi->peraih }}</span>
+                </a>
             </div>
+
+            @php
+                $counter++;
+            @endphp
+
+            @if ($loop->last)
+        </div> <!-- close the last row -->
+        @endif
+        @endforeach
+
+        <div class="text-center">
+            {{ $prestasis->links() }}
         </div>
+    </div>
     </div>
 
 

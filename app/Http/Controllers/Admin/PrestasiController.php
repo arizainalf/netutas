@@ -51,7 +51,6 @@ class PrestasiController extends Controller
             'nama' => 'required',
             'tingkat' => 'required',
             'peraih' => 'required',
-            'gambar' => 'image|mimes:png,jpg,jpeg|max:5120',
         ]);
 
         if ($validator->fails()) {

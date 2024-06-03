@@ -12,7 +12,8 @@
                 class="col-lg-4 col-12 order-lg-1 min-vh-100 order-2 bg-white d-flex justify-content-center align-items-center">
                 <div class="py-2">
                     <div class="text-center mb-4">
-                        <img src="{{ asset('/storage/img/sekolah/p-250.png') }}" alt="logo">
+                        <img src="{{ asset('/storage/img/profil/' . $profileSekolah['logo_sekolah']) }}" alt="logo"
+                            width="100px">
                     </div>
                     <h4 class="text-dark text-center mb-2 font-weight-normal">Selamat Datang di</h4>
                     <h4 class="font-weight-bold text-dark text-center mb-2">Website {{ config('app.name') }}</h4>
@@ -40,6 +41,8 @@
                             <button type="submit" class="btn btn-block btn-danger btn-lg btn-icon icon-right">
                                 <i class="fas fa-sign-in mr-2"></i>Masuk
                             </button>
+                            <a class="btn btn-block btn-primary btn-lg btn-icon icon-right" href="{{ route('home') }}"><i
+                                    class="fa-solid fa-house mr-2"></i>Kembali Ke halaman Utama</a>
                         </div>
                     </form>
                     <div class="text-center">

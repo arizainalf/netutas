@@ -14,7 +14,11 @@
                         <label for="gambar" class="form-label">Dokumentasi </label>
                         <input type="file" name="gambar" id="gambar" class="dropify" data-height="200">
                         <small class="text-danger" id="errorgambar"></small>
+                        <div id="image-crop-container" style="display:none;">
+                            <img id="image-crop" style="max-width: 100%;">
+                        </div>
                     </div>
+
                     <div class="form-group">
                         <label for="nama" class="form-label">Nama Prestasi <span
                                 class="text-danger">*</span></label>

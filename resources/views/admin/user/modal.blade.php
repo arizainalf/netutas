@@ -14,6 +14,10 @@
                         <label for="image" class="form-label">Foto </label>
                         <input type="file" name="image" id="image" class="dropify" data-height="200">
                         <small class="invalid-feedback" id="errorimage"></small>
+                        <div id="image-crop-container" style="display:none;">
+                            <img id="image-crop" style="max-width: 100%;">
+                            <button type="button" id="crop-image-btn" class="btn btn-primary mt-2">Crop & Save</button>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="nama" class="form-label">Nama <span class="text-danger">*</span></label>

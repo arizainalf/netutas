@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ asset('library/datatables/Select-1.2.4/css/select.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('library/dropify/css/dropify.css') }}">
     <link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 @endpush
 
 @section('main')
@@ -63,10 +64,79 @@
     <script src="{{ asset('library/datatables/Select-1.2.4/js/dataTables.select.min.js') }}"></script>
     <script src="{{ asset('library/dropify/js/dropify.js') }}"></script>
     <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
     <script>
+        let cropper;
+
         $(document).ready(function() {
             $('.dropify').dropify();
+
+            $("#image").on("change", function(e) {
+                const files = e.target.files;
+                if (files && files.length > 0) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        $("#image-crop-container").show();
+                        $("#image-crop").attr("src", e.target.result);
+                        cropper = new Cropper(document.getElementById("image-crop"), {
+                            aspectRatio: 1,
+                            viewMode: 1
+                        });
+                    };
+                    reader.readAsDataURL(files[0]);
+                }
+            });
+
+            $("#crop-image-btn").on("click", function() {
+                const canvas = cropper.getCroppedCanvas({
+                    width: 300,
+                    height: 300
+                });
+                canvas.toBlob(function(blob) {
+                    const formData = new FormData();
+                    formData.append("image", blob);
+
+                    // Append other form data
+                    $("#saveData").serializeArray().forEach(field => {
+                        formData.append(field.name, field.value);
+                    });
+
+                    // Send the data to the server
+                    let url = "{{ route('admin.user.store') }}";
+                    const id = $("#saveData #id").val();
+                    if (id) {
+                        formData.append("_method", "PUT");
+                        url = `/admin/user/${id}`;
+                    }
+
+                    const successCallback = function(response) {
+                        $('#image').parent().find(".dropify-clear").trigger('click');
+                        $("#image-crop-container").hide();
+                        cropper.destroy();
+                        setButtonLoadingState("#saveData .btn.btn-success", false);
+                        handleSuccess(response, "user-table", "createModal");
+                    };
+
+                    const errorCallback = function(error) {
+                        setButtonLoadingState("#saveData .btn.btn-success", false);
+                        handleValidationErrors(error, "saveData", ["nama", "email", "password",
+                            "role", "image"
+                        ]);
+                    };
+
+                    ajaxCall(url, "POST", formData, successCallback, errorCallback);
+                });
+            });
+
+            $("#saveData").submit(function(e) {
+                e.preventDefault();
+                if (!cropper) {
+                    alert("Please select and crop an image first.");
+                    return;
+                }
+                $("#crop-image-btn").trigger("click");
+            });
 
             datatableCall('user-table', '{{ route('admin.user.index') }}', [{
                     data: 'DT_RowIndex',
@@ -93,33 +163,6 @@
                     name: 'action'
                 },
             ]);
-
-            $("#saveData").submit(function(e) {
-                setButtonLoadingState("#saveData .btn.btn-success", true);
-                e.preventDefault();
-                const kode = $("#saveData #id").val();
-                let url = "{{ route('admin.user.store') }}";
-                const data = new FormData(this);
-
-                if (kode !== "") {
-                    data.append("_method", "PUT");
-                    url = `/admin/user/${kode}`;
-                }
-
-                const successCallback = function(response) {
-                    setButtonLoadingState("#saveData .btn.btn-success", false);
-                    handleSuccess(response, "user-table", "createModal");
-                };
-
-                const errorCallback = function(error) {
-                    setButtonLoadingState("#saveData .btn.btn-success", false);
-                    handleValidationErrors(error, "saveData", ["nama", "role", "email",
-                        "password", "image"
-                    ]);
-                };
-
-                ajaxCall(url, "POST", data, successCallback, errorCallback);
-            });
         });
     </script>
 @endpush

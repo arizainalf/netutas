@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
 use App\Models\Berita;
 use App\Models\Prestasi;
 use App\Models\StaffGuru;
@@ -19,7 +20,8 @@ class DashboardController extends Controller
         $ekstrakurikuler = Ekstrakurikuler::count();
         $prestasi = Prestasi::count();
         $staff = StaffGuru::count();
+        $user = User::count();
 
-        return view('admin.dashboard.index', compact('berita', 'ekstrakurikuler', 'prestasi', 'staff'));
+        return view('admin.dashboard.index', compact('berita', 'user', 'prestasi', 'staff'));
     }
 }

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ asset('library/datatables/Select-1.2.4/css/select.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('library/dropify/css/dropify.css') }}">
     <link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 @endpush
 
 @section('main')
@@ -64,6 +65,7 @@
 @endsection
 
 @push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     <script src="{{ asset('library/sweetalert/dist/sweetalert.min.js') }}"></script>
     <script src="{{ asset('library/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('library/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js') }}"></script>
@@ -72,63 +74,105 @@
     <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
 
     <script>
+        let cropper;
+        const imageInput = document.getElementById('gambar');
+        const cropImageContainer = document.getElementById('image-crop-container');
+        const imageCrop = document.getElementById('image-crop');
+
+        imageInput.addEventListener('change', function(e) {
+            const files = e.target.files;
+            if (files && files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imageCrop.src = e.target.result;
+                    cropImageContainer.style.display = 'block';
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+                    cropper = new Cropper(imageCrop, {
+                        aspectRatio: 3 / 4,
+                        viewMode: 1
+                    });
+                };
+                reader.readAsDataURL(files[0]);
+            }
+        });
+
+        $("#saveData").submit(function(e) {
+            e.preventDefault();
+            setButtonLoadingState("#saveData .btn.btn-success", true);
+
+            const kode = $("#saveData #id").val();
+            let url = "{{ route('admin.prestasi.store') }}";
+            const data = new FormData(this);
+
+            if (kode !== "") {
+                data.append("_method", "PUT");
+                url = `/admin/prestasi/${kode}`;
+            }
+
+            if (cropper) {
+                cropper.getCroppedCanvas().toBlob(function(blob) {
+                    data.append('gambar', blob);
+                    sendData(url, data);
+                });
+            } else {
+                sendData(url, data);
+            }
+        });
+
+        function sendData(url, data) {
+            const successCallback = function(response) {
+                setButtonLoadingState("#saveData .btn.btn-success", false);
+                handleSuccess(response, "prestasi-table", "createModal");
+                location.reload(); // Refresh halaman setelah berhasil menyimpan
+
+            };
+
+            const errorCallback = function(error) {
+                setButtonLoadingState("#saveData .btn.btn-success", false);
+                handleValidationErrors(error, "saveData", ["nama", "tingkat", "deskripsi", "peraih", "gambar"]);
+            };
+
+            ajaxCall(url, "POST", data, successCallback, errorCallback);
+        }
+
         $(document).ready(function() {
             $('.dropify').dropify();
 
-            datatableCall('prestasi-table', '{{ route('admin.prestasi.index') }}', [{
-                    data: 'DT_RowIndex',
-                    name: 'DT_RowIndex'
-                },
-                {
-                    data: 'nama',
-                    name: 'nama'
-                },
-                {
-                    data: 'tingkat',
-                    name: 'tingkat'
-                },
-                {
-                    data: 'deskripsi',
-                    name: 'deskripsi'
-                },
-                {
-                    data: 'peraih',
-                    name: 'peraih'
-                },
-                {
-                    data: 'image',
-                    name: 'image'
-                },
-                {
-                    data: 'action',
-                    name: 'action'
-                },
-            ]);
+            datatableCall('prestasi-table',
+                '{{ route('admin.prestasi.index') }}',
+                [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex'
+                    },
+                    {
+                        data: 'nama',
+                        name: 'nama'
+                    },
+                    {
+                        data: 'tingkat',
+                        name: 'tingkat'
+                    },
+                    {
+                        data: 'deskripsi',
+                        name: 'deskripsi'
+                    },
+                    {
+                        data: 'peraih',
+                        name: 'peraih'
+                    },
+                    {
+                        data: 'image',
+                        name: 'image'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
+                ]);
 
-            $("#saveData").submit(function(e) {
-                setButtonLoadingState("#saveData .btn.btn-success", true);
-                e.preventDefault();
-                const kode = $("#saveData #id").val();
-                let url = "{{ route('admin.prestasi.store') }}";
-                const data = new FormData(this);
-
-                if (kode !== "") {
-                    data.append("_method", "PUT");
-                    url = `/admin/prestasi/${kode}`;
-                }
-
-                const successCallback = function(response) {
-                    setButtonLoadingState("#saveData .btn.btn-success", false);
-                    handleSuccess(response, "prestasi-table", "createModal");
-                };
-
-                const errorCallback = function(error) {
-                    setButtonLoadingState("#saveData .btn.btn-success", false);
-                    handleValidationErrors(error, "saveData", ["nama"]);
-                };
-
-                ajaxCall(url, "POST", data, successCallback, errorCallback);
-            });
+            select2ToJson("#publisher", "{{ route('admin.prestasi.index') }}", "#createModal");
         });
     </script>
 @endpush

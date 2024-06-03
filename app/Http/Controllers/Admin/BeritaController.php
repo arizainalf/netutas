@@ -64,7 +64,7 @@ class BeritaController extends Controller
         $validator = Validator::make($request->all(), [
             'judul' => 'required',
             'deskripsi' => 'required',
-            'gambar' => 'image|mimes:png,jpg,jpeg|max:5120',
+            'gambar' => 'image|mimes:png,jpg,jpeg|max:10240',
         ]);
 
         if ($validator->fails()) {
@@ -103,7 +103,7 @@ class BeritaController extends Controller
     {
         
         $validator = Validator::make($request->all(), [
-            'gambar' => 'image|mimes:png,jpg,jpeg|max:5120',
+            'gambar' => 'image|mimes:png,jpg,jpeg|max:10240',
         ]);
 
         if ($validator->fails()) {
