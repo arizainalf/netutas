@@ -15,8 +15,8 @@ class DatabaseSeeder extends Seeder
     {
         $usersData = [
             [
-                'nama' => 'Ari Zainal Fauziah',
-                'email' => 'arizainalf@gmail.com',
+                'nama' => 'Tedi ardian',
+                'email' => 'tedi@gmail.com',
                 'password' => bcrypt('11221122'),
                 'role' => 'Admin',
                 'image' => 'user.png',
@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
                 'nama' => 'Pramuka',
             ]
             ];
-    
+
             DB::table('ekstrakurikulers')->insert($ekstrakurikulerData);
 
         $jabatansData = [
@@ -259,9 +259,9 @@ class DatabaseSeeder extends Seeder
                 'peraih' => 'Kelas 8A',
             ],
         ];
-        
+
         DB::table('prestasis')->insert($prestasiData);
-        
+
 
         }
 }
