@@ -1,14 +1,13 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
 
-use App\Models\prestasi;
-use Illuminate\Http\Request;
-use App\Traits\JsonResponder;
 use App\Http\Controllers\Controller;
+use App\Models\prestasi;
+use App\Traits\JsonResponder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 class PrestasiController extends Controller
 {
@@ -23,12 +22,14 @@ class PrestasiController extends Controller
             if ($request->mode == "datatable") {
                 return DataTables::of($prestasis)
                     ->addColumn('action', function ($prestasi) {
-                        $editButton = '<button class="btn btn-sm btn-warning d-inline-flex  align-items-baseline  mr-1" onclick="getModal(`createModal`, `/admin/prestasi/' . $prestasi->id . '`, [`id`, `nama`,`deskripsi`,`peraih`,`tingkat`])"><i class="fas fa-edit mr-1"></i>Edit</button>';
+                        $editButton   = '<button class="btn btn-sm btn-warning d-inline-flex  align-items-baseline  mr-1" onclick="getModal(`createModal`, `/admin/prestasi/' . $prestasi->id . '`, [`id`, `nama`,`deskripsi`,`peraih`,`tingkat`])"><i class="fas fa-edit mr-1"></i>Edit</button>';
                         $deleteButton = '<button class="btn btn-sm btn-danger d-inline-flex  align-items-baseline " onclick="confirmDelete(`/admin/prestasi/' . $prestasi->id . '`, `prestasi-table`)"><i class="fas fa-trash mr-1"></i>Hapus</button>';
                         return $editButton . $deleteButton;
                     })
                     ->addColumn('image', function ($prestasi) {
-                        return '<img src="/storage/img/prestasi/' . $prestasi->image . '" width="150px" alt="">';
+                        $imagePath = asset('storage/img/prestasi/' . $prestasi->image);
+                        return '<img src="' . $imagePath . '" width="150px" alt="Gambar Berita">';
+
                     })
                     ->addIndexColumn()
                     ->rawColumns(['action', 'image'])
@@ -36,7 +37,7 @@ class PrestasiController extends Controller
             }
 
             return $this->successResponse($prestasis, 'Data prestasi ditemukan.');
-        };
+        }
 
         return view('admin.prestasi.index');
     }
@@ -46,25 +47,28 @@ class PrestasiController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         $validator = Validator::make($request->all(), [
-            'nama' => 'required',
+            'nama'    => 'required',
             'tingkat' => 'required',
-            'peraih' => 'required',
+            'peraih'  => 'required',
         ]);
 
         if ($validator->fails()) {
             return $this->errorResponse($validator->errors(), 'Data tidak valid.', 422);
         }
-        $image = $request->file('gambar')->hashName();
-        $request->file('gambar')->storeAs('public/img/prestasi', $image);
+
+        if ($request->hasFile('gambar')) {
+            $image = $request->file('gambar')->hashName();
+            $request->file('gambar')->storeAs('img/prestasi/', $image, 'public');
+        }
 
         $prestasi = Prestasi::create([
-            'nama' => $request->nama,
+            'nama'      => $request->nama,
             'deskripsi' => $request->deskripsi,
-            'image' => $image,
-            'tingkat' => $request->tingkat,
-            'peraih' => $request->peraih,
+            'image'     => $image,
+            'tingkat'   => $request->tingkat,
+            'peraih'    => $request->peraih,
         ]);
 
         return $this->successResponse($prestasi, 'Data prestasi Disimpan!', 201);
@@ -77,7 +81,7 @@ class PrestasiController extends Controller
     {
         $prestasi = Prestasi::find($id);
 
-        if (!$prestasi) {
+        if (! $prestasi) {
             return $this->errorResponse(null, 'Data prestasi Tidak Ada!');
         }
 
@@ -89,7 +93,7 @@ class PrestasiController extends Controller
      */
     public function edit(string $id)
     {
-    
+
     }
 
     /**
@@ -98,10 +102,10 @@ class PrestasiController extends Controller
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
-            'nama' => 'required',
+            'nama'    => 'required',
             'tingkat' => 'required',
-            'peraih' => 'required',
-            'gambar' => 'image|mimes:png,jpg,jpeg|max:5120',
+            'peraih'  => 'required',
+            'gambar'  => 'image|mimes:png,jpg,jpeg|max:5120',
         ]);
 
         if ($validator->fails()) {
@@ -109,15 +113,15 @@ class PrestasiController extends Controller
         }
         $prestasi = Prestasi::find($id);
 
-        if (!$prestasi) {
+        if (! $prestasi) {
             return $this->errorResponse(null, 'Data Prestasi Tidak Ada!');
         }
 
         $updatePrestasi = [
-            'nama' => $request->nama,
+            'nama'      => $request->nama,
             'deskripsi' => $request->deskripsi,
-            'tingkat' => $request->tingkat,
-            'peraih' => $request->peraih,
+            'tingkat'   => $request->tingkat,
+            'peraih'    => $request->peraih,
         ];
 
         if ($request->hasFile('gambar')) {
@@ -125,11 +129,11 @@ class PrestasiController extends Controller
                 Storage::delete('public/img/prestasi/' . $prestasi->image);
             }
             $image = $request->file('gambar')->hashName();
-            $request->file('gambar')->storeAs('public/img/prestasi/', $image);
-            
+            $request->file('gambar')->storeAs('img/prestasi/', $image, 'public');
+
             $updatePrestasi['image'] = $image;
         }
-        
+
         $prestasi->update($updatePrestasi);
 
         return $this->successResponse($prestasi, 'Data Prestasi Diubah!');
@@ -142,7 +146,7 @@ class PrestasiController extends Controller
     {
         $prestasi = Prestasi::find($id);
 
-        if (!$prestasi) {
+        if (! $prestasi) {
             return $this->errorResponse(null, 'Data prestasi Tidak Ada!');
         }
 

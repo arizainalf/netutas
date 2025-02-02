@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('image')->default('staff.png');
             $table->string('nama');
-            $table->UnsignedBigInteger('id_jabatan');
-            $table->UnsignedBigInteger('id_mapel');
+            $table->UnsignedBigInteger('id_jabatan')->nullable();
+            $table->UnsignedBigInteger('id_mapel')->nullable();
             $table->timestamps();
 
             $table->foreign('id_jabatan')->references('id')->on('jabatans')->onDelete('cascade');

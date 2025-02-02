@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'User')
+@section('title', 'Home')
 
 @push('style')
     <style>
@@ -21,7 +21,7 @@
 @endpush
 
 @section('main')
-    <header id="fh5co-header" class="fh5co-cover" role="banner"
+    <header id="fh5co-header" class="fh5co-cover mb-2" role="banner"
         style="background-image:url({{ asset('storage/img/sekolah/sekolah1.jpg') }});" data-stellar-background-ratio="0.5">
         <div class="overlay"></div>
         <div class="container">

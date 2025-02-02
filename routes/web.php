@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\MisiController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\MapelController;
 use App\Http\Controllers\Admin\BeritaController;
@@ -29,6 +30,7 @@ use App\Http\Controllers\Admin\EkstrakurikulerController;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('berita',[HomeController::class, 'berita'])->name('berita');
 Route::get('prestasi',[HomeController::class, 'prestasi'])->name('prestasi');
@@ -48,6 +50,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
   Route::resource('jabatan', JabatanController::class)->names('admin.jabatan');
   Route::resource('user', UserController::class)->names('admin.user');
   Route::resource('mapel', MapelController::class)->names('admin.mapel');
+  Route::resource('misi', MisiController::class)->names('admin.misi');
   Route::resource('staff', StaffGuruController::class)->names('admin.staff');
   Route::resource('prestasi', PrestasiController::class)->names('admin.prestasi');
   Route::resource('ekstrakurikuler', EkstrakurikulerController::class)->names('admin.ekstrakurikuler');

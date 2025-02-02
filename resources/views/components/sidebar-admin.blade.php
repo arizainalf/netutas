@@ -1,64 +1,21 @@
-<div class="main-sidebar sidebar-style-2">
-    <aside id="sidebar-wrapper">
-        <div class="sidebar-brand">
-            <a href="/admin">{{ config('app.name') }}</a>
-        </div>
-        <div class="sidebar-brand sidebar-brand-sm">
-            <a href="/admin">7Tas</a>
-        </div>
-        <ul class="sidebar-menu">
-            <li class="{{ Request::is('admin') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ url('admin') }}"><i class="fas fa-dashboard"></i><span>Beranda</span></a>
-            </li>
-            <li class="{{ Request::is('admin/berita') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ url('admin/berita') }}"><i class="fa-regular fa-newspaper"></i>
-                    <span>Berita</span></a>
-            </li>
-            {{-- <li class="{{ Request::is('admin/ekstrakurikuler') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ url('admin/ekstrakurikuler') }}"><i class="fa-solid fa-people-roof"></i>
-                    <span>Ekstrakurikuler</span></a>
-            </li> --}}
-            <li class="{{ Request::is('admin/jabatan') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ url('admin/jabatan') }}"><i class="fa-solid fa-user-check"></i>
-                    <span>Jabatan</span></a>
-            </li>
-            <li class="{{ Request::is('admin/mapel') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ url('admin/mapel') }}"><i class="fa-solid fa-chalkboard-user"></i>
-                    <span>Mapel</span></a>
-            </li>
-            <li class="{{ Request::is('admin/staff') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ url('admin/staff') }}"><i class="fa-solid fa-users-line"></i>
-                    <span>Staff & Guru</span></a>
-            </li>
-            <li class="{{ Request::is('admin/prestasi') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ url('admin/prestasi') }}"><i class="fa-solid fa-trophy"></i>
-                    <span>Prestasi</span></a>
-            </li>
-            <li class="{{ Request::is('admin/user') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ url('admin/user') }}"><i class="fa-solid fa-users"></i>
-                    <span>User</span></a>
-            </li>
-            <li class="{{ Request::is('admin/profil') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ url('admin/profil') }}"><i class="fa-regular fa-id-badge"></i>
-                    <span>Profile</span></a>
-            </li>
-            <li class="menu-header">Manajemen Pengaturan</li>
-            <li class="{{ Request::is('admin/profil-sekolah') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ url('admin/profil-sekolah') }}"><i class="fa-solid fa-gear"></i>
-                    <span>Profile Sekolah</span></a>
-            </li>
-            <li class="{{ Request::is('admin/profil-sekolah') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ url('admin/profil-sekolah') }}"><i class="fa-solid fa-gear"></i>
-                    <span>Visi Misi</span></a>
-            </li>
-            <div class="hide-sidebar-mini mt-2 mb-2 p-2">
-                <a href="{{ url('') }}" class="btn btn-primary btn-lg btn-block btn-icon-split">
-                    <i class="fa-solid fa-house"></i> Halaman Depan
-                </a>
-                <a href="{{ url('logout') }}" class="btn btn-primary btn-lg btn-block btn-icon-split">
-                    <i class="fa-solid fa-right-from-bracket"></i> Keluar
-                </a>
-            </div>
-        </ul>
-    </aside>
-</div>
+    <div class="sidebar p-3">
+      <h5 class="text-center fw-bold">{{config('app.name')}}</h5>
+      <nav class="nav flex-column">
+        <a href="{{ route('admin.dashboard') }}" class="nav-link {{ Request::is('admin') ? 'active' : '' }}"><i class="bi bi-house"></i> Beranda</a>
+        <a href="{{ route('admin.berita.index') }}" class="nav-link {{ Request::is('admin/berita') ?  'active' : (Request::is('admin/berita/*') ? 'active' : '' ) }}"><i class="bi bi-newspaper"></i> Berita</a>
+        <a href="{{ route('admin.jabatan.index') }}" class="nav-link {{ Request::is('admin/jabatan') ?  'active' : (Request::is('admin/jabatan/*') ? 'active' : '' ) }}"><i class="bi bi-briefcase"></i> Jabatan</a>
+        <a href="{{ route('admin.mapel.index') }}" class="nav-link {{ Request::is('admin/mapel') ?  'active' : (Request::is('admin/mapel/*') ? 'active' : '' ) }}"><i class="bi bi-book"></i> Mapel</a>
+        <a href="{{ route('admin.staff.index') }}" class="nav-link {{ Request::is('admin/staff') ?  'active' : (Request::is('admin/staff/*') ? 'active' : '' ) }}"><i class="bi bi-people"></i> Staff & Guru</a>
+        <a href="{{ route('admin.prestasi.index') }}" class="nav-link {{ Request::is('admin/prestasi') ?  'active' : (Request::is('admin/prestasi/*') ? 'active' : '' ) }}"><i class="bi bi-trophy"></i> Prestasi</a>
+        <a href="{{ route('admin.user.index') }}" class="nav-link {{ Request::is('admin/user') ?  'active' : (Request::is('admin/user/*') ? 'active' : '' ) }}"><i class="bi bi-person"></i> User</a>
+        <a href="{{ route('admin.profil') }}" class="nav-link {{ Request::is('admin/profil') ?  'active' : (Request::is('admin/profil/*') ? 'active' : '' ) }}"><i class="bi bi-person-circle"></i> Profile</a>
+        <hr>
+        <h6 class="px-3 text-muted">Manajemen Pengaturan</h6>
+        <a href="{{ route('admin.profil.sekolah') }}" class="nav-link {{ Request::is('admin/profil-sekolah') ?  'active' : (Request::is('admin/profil-sekolah/*') ? 'active' : '' ) }}"><i class="bi bi-building"></i> Profile Sekolah</a>
+        <a href="{{ route('admin.misi.index') }}" class="nav-link {{ Request::is('admin/misi') ?  'active' : (Request::is('admin/misi/*') ? 'active' : '' ) }}"><i class="bi bi-journal"></i> Misi</a>
+      </nav>
+      <div class="mt-auto p-3">
+        <a href="{{ route('home') }}" class="btn btn-primary w-100 mb-2"><i class="bi bi-house-door"></i> Halaman Depan</a>
+        <a href="{{ route('logout') }}" class="btn btn-secondary w-100"><i class="bi bi-box-arrow-left"></i> Keluar</a>
+      </div>
+    </div>

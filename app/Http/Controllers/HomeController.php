@@ -86,7 +86,7 @@ class HomeController extends Controller
     public function getBerita(Request $request, $slug){
         
         if ($request->ajax()) {
-            $berita = Berita::find($slug);
+            $berita = Berita::where('slug',$slug);
 
             if (!$berita) {
                 return $this->errorResponse(null, 'Data Berita tidak ditemukan.', 404);
@@ -94,9 +94,10 @@ class HomeController extends Controller
             
             return $this->successResponse($berita, 'Data Berita ditemukan.');
         }
-        
-        $berita = Berita::findOrFail($slug);
 
-        return view('pages.berita.show', compact('berita'));
+        $profile = Profile::where('id', 1)->first();
+        $berita = Berita::where('slug',$slug)->get();
+ 
+        return view('pages.berita.show', compact('berita','profile'));
     }
 }

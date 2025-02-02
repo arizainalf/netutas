@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Traits\Jsonresponder;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 
@@ -27,11 +28,8 @@ class UserController extends Controller
                         $deleteButton = '<button class="btn btn-sm btn-danger d-inline-flex  align-items-baseline " onclick="confirmDelete(`/admin/user/' . $user->id . '`, `user-table`)"><i class="fas fa-trash mr-1"></i>Hapus</button>';
                         return $editButton . $deleteButton;
                     })
-                    ->addColumn('image', function ($user) {
-                        return '<img src="/storage/img/user/' . $user->image . '" width="150px" alt="">';
-                    })
                     ->addIndexColumn()
-                    ->rawColumns(['action', 'image'])
+                    ->rawColumns(['action'])
                     ->make(true);
             }
 
@@ -51,22 +49,17 @@ class UserController extends Controller
             'email' => 'required',
             'password' => 'required',
             'role' => 'required',
-            'image' => 'image|mimes:png,jpg,jpeg|max:5120',
         ]);
 
         if ($validator->fails()) {
             return $this->errorResponse($validator->errors(), 'Data tidak valid.', 422);
         }
 
-        $image = $request->file('image')->hashName();
-        $request->file('image')->storeAs('public/img/user', $image);
-
         $user = User::create([
             'nama' => $request->nama,
             'email' => $request->email,
-            'password' => $request->password,
+            'password' => bcrypt($request->password),
             'role' => $request->role,
-            'image' => $image ?? 'default.jpg',
         ]);
 
         return $this->successResponse($user, 'Data User Disimpan!', 201);
@@ -100,7 +93,6 @@ class UserController extends Controller
             'email' => 'required',
             'password' => '',
             'role' => 'required',
-            'image' => 'image|mimes:png,jpg,jpeg|max:5120',
         ]);
 
         if ($validator->fails()) {
@@ -127,14 +119,6 @@ class UserController extends Controller
             ];
         }
 
-        if ($request->hasFile('image')) {
-            if ($user->image != 'default.jpg' && Storage::exists('public/img/user/' . $user->image)) {
-                Storage::delete('public/img/user/' . $user->image);
-            }
-            $image = $request->file('image')->hashName();
-            $request->file('image')->storeAs('public/img/user', $image);
-            $updateUser['image'] = $image;
-        }
         $user->update($updateUser);
 
         return $this->successResponse($user, 'Data User Diubah!');
@@ -148,10 +132,6 @@ class UserController extends Controller
 
         if (!$user) {
             return $this->errorResponse(null, 'Data User Tidak Ada!');
-        }
-
-        if ($user->image != 'default.jpg' && Storage::exists('public/img/user/' . $user->image)) {
-            Storage::delete('public/img/user/' . $user->image);
         }
 
         $user->delete();

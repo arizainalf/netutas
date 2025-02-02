@@ -17,7 +17,6 @@ class DashboardController extends Controller
     public function index()
     {
         $berita = Berita::count();
-        $ekstrakurikuler = Ekstrakurikuler::count();
         $prestasi = Prestasi::count();
         $staff = StaffGuru::count();
         $user = User::count();
