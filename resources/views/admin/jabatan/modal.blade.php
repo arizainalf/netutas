@@ -1,8 +1,9 @@
+{{-- save-modal  --}}
 <div class="modal fade" role="dialog" id="createModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><span id="label-modal"></span> Jabatan</h5>
+                <h5 class="modal-title"><span id="label-modal"></span> @yield('title')</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -10,8 +11,9 @@
             <form id="saveData" autocomplete="off">
                 <div class="modal-body">
                     <input type="hidden" id="id">
+                    <input type="hidden" id="userId" value="{{ auth()->user()->id }}">
                     <div class="form-group">
-                        <label for="nama" class="form-label">Nama Jabatan <span class="text-danger">*</span></label>
+                        <label for="nama" class="form-label">Jabatan <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="nama" name="nama">
                         <small class="invalid-feedback" id="errornama"></small>
                     </div>
@@ -24,3 +26,4 @@
         </div>
     </div>
 </div>
+{{-- end save-data  --}}

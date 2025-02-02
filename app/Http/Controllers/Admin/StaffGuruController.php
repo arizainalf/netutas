@@ -52,28 +52,41 @@ class StaffGuruController extends Controller
      */
     public function store(Request $request)
     {
-        
         $validator = Validator::make($request->all(), [
             'nama' => 'required',
         ]);
-
+    
         if ($validator->fails()) {
             return $this->errorResponse($validator->errors(), 'Data tidak valid.', 422);
         }
-
+    
         if ($request->hasFile('image')) {
             // Jika ada image yang diunggah, simpan image
             $image = $request->file('image')->hashName();
             $request->file('image')->storeAs('public/img/staff', $image);
-        }else{
+        } else {
             $image = 'staff.png';
         }
-        $staffGuru = StaffGuru::create([
+    
+        // Buat array data yang akan disimpan
+        $data = [
             'image' => $image,
             'nama' => $request->nama,
-            'id_mapel' => $request->id_mapel,
-            'id_jabatan' => $request->id_jabatan,
-        ]);
+        ];
+    
+        // Tambahkan id_mapel jika tidak kosong
+        if (!empty($request->id_mapel)) {
+            $data['id_mapel'] = $request->id_mapel;
+        }
+    
+        // Tambahkan id_jabatan jika tidak kosong
+        if (!empty($request->id_jabatan)) {
+            $data['id_jabatan'] = $request->id_jabatan;
+        }
+    
+        // Simpan data ke database
+        $staffGuru = StaffGuru::create($data);
+    
         return $this->successResponse($staffGuru, 'Data Disimpan!', 201);
     }
 
